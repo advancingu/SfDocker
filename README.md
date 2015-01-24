@@ -7,3 +7,5 @@ The goal is to allow this setup to be easily deployed to production by stripping
 
 This repository is still in early development. Feel free to contribute.
 
+![Container structure](https://raw.github.com/advancingu/SfDocker/master/Resources/container-structure.png)
+

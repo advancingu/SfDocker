@@ -1,4 +1,5 @@
 var/
+Resources/*.odp
 
 # Numerous always-ignore extensions
 *.diff
