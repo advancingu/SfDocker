@@ -16,3 +16,5 @@ ENV XDEBUG_CONNECT_BACK 0
 EXPOSE 9000
 CMD ["/usr/sbin/run-php.sh"]
 
+WORKDIR /var/www/symfony
+
