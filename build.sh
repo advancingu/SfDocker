@@ -11,7 +11,7 @@
 set -e
 set -vx
 
-DOCKER_COMPOSE_VERSION=1.1.0-rc1
+DOCKER_COMPOSE_VERSION=1.1.0-rc2
 
 # Needed for some Symfony CLI commands
 if [ ! -f /usr/bin/mysql ]; then
