@@ -10,7 +10,7 @@
 
 set -e
 
-DOCKER_COMPOSE_VERSION=1.1.0-rc2
+DOCKER_COMPOSE_VERSION=1.1.0
 
 # Needed for some Symfony CLI commands
 if [ ! -f /usr/bin/mysql ]; then
