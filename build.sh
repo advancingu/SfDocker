@@ -9,7 +9,6 @@
 # Run this script as your unprivileged user (ubuntu or yourname)
 
 set -e
-set -vx
 
 DOCKER_COMPOSE_VERSION=1.1.0-rc2
 
