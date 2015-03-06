@@ -1,5 +1,5 @@
 appcode:
-    image: symfony/app-code
+    image: symfony/app-code-dynamic
     volumes:
     - ../mySymfonyProject:/var/www/symfony
     command: true
