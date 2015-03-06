@@ -1,4 +1,4 @@
-FROM symfony/app:latest
+FROM symfony/php:latest
 MAINTAINER Markus Weiland <mw@graph-ix.net>
 
 RUN apt-get install -y php5-xdebug

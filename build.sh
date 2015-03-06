@@ -78,8 +78,8 @@ fi
 
 # Build the Docker images
 echo "Building Docker images."
-docker build -t symfony/app app
-docker build -t symfony/app-dev app-dev
+docker build -t symfony/php php
+docker build -t symfony/php-dev php-dev
 docker build -t symfony/app-code-dynamic app-code-dynamic
 docker build -t symfony/nginx nginx
 docker build -t symfony/nginx-dev nginx-dev

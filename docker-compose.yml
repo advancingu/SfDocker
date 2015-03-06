@@ -13,7 +13,7 @@ db:
         MYSQL_USER: symfony
         MYSQL_PASSWORD: symfonypass
 php:
-    image: symfony/app-dev
+    image: symfony/php-dev
     expose:
     - "9000:9000"
     volumes_from:
