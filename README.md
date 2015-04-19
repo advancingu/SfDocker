@@ -46,6 +46,17 @@ To allow your host environment ``app/console`` to connect to the database, creat
 
 Then run ``app/console`` with ``--env=cli`` to use parameters from this new environment.
 
+Building SfDocker images
+------------------------
+
+To build the Docker images, run the following commands in the repository's top folder:
+
+    docker build -t symfony/php php
+    docker build -t symfony/php-dev php-dev
+    docker build -t symfony/app-code-dynamic app-code-dynamic
+    docker build -t symfony/nginx nginx
+    docker build -t symfony/nginx-dev nginx-dev
+
 Authors
 -------
 
