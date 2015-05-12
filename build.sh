@@ -78,11 +78,8 @@ fi
 
 # Build the Docker images
 echo "Building Docker images."
-docker build -t symfony/php php
-docker build -t symfony/php-dev php-dev
-docker build -t symfony/app-code-dynamic app-code-dynamic
-docker build -t symfony/nginx nginx
-docker build -t symfony/nginx-dev nginx-dev
+docker build -t symfony/worker-base worker-base
+docker build -t symfony/worker-dev worker-dev
 
 
 # Give the user and web server group full write access to all given directories

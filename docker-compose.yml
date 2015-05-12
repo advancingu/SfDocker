@@ -1,8 +1,3 @@
-appcode:
-    image: symfony/app-code-dynamic
-    volumes:
-    - ../mySymfonyProject:/var/www/symfony
-    command: true
 db:
     image: mysql
     ports:
@@ -12,26 +7,16 @@ db:
         MYSQL_DATABASE: symfony
         MYSQL_USER: symfony
         MYSQL_PASSWORD: symfonypass
-php:
-    image: symfony/php-dev
-    expose:
-    - "9000:9000"
-    volumes_from:
-    - appcode
+worker:
+    image: symfony/worker-dev
+    ports:
+    - "8080:80"
     environment:
         XDEBUG_HOST: 192.168.1.194
         XDEBUG_PORT: 9000
         XDEBUG_REMOTE_MODE: req
     links:
     - db
-nginx:
-    image: symfony/nginx-dev
-    ports:
-    - "8080:80"
-    links:
-    - php
-    volumes_from:
-    - appcode
     volumes:
     - "var/nginx/:/var/log/nginx"
-
+    - ../mySymfonyProject:/var/www/symfony
