@@ -15,8 +15,9 @@ There is a `worker-base` image file that contains PHP-FPM and NGINX. Both are co
 
 There is a `worker-dev` images that extends `worker-base` that adds development functionality such as Xdebug.
 
-There is a `worker-prod` image that extends `worker-base` and bakes a Symfony project into the container for easy 
-deployment.
+There is a `worker-prod` image that extends `worker-base` and bakes a Symfony project into the container. This image
+can be easily deployed as an immutable throwaway instance of the entire application. This image is built with 
+`worker-prod/build-release.sh`.
 
 Environment variables are used to control behavior of processes inside the container.
 

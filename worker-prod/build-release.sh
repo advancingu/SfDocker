@@ -1,18 +1,17 @@
 #!/bin/bash
 
-# Bakes the application code into a Docker image "app-code-static".
-# Deploy this image to your production servers as a 
-# replacement for "app-code-dynamic".
+# Bakes the application code into a Docker image "symfony/worker-prod".
+# Simply deploy this image to your production servers.
 
 set -e
 set -xv
 
 COMPOSER_BIN=composer
 BUILD_DIR=/tmp/app-code-build
+# Modify to your needs
 REPOSITORY=git@github.com:symfony/symfony-standard.git
 BRANCH=2.6
-WORKING_DIR=$(pwd)
-DOCKERFILE_DIR=${WORKING_DIR}/app-code-static
+DOCKERFILE_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 # Clean up old build files
 if [ -d ${BUILD_DIR} ]; then
@@ -40,6 +39,7 @@ cp code.tar.gz ${DOCKERFILE_DIR}
 
 # Build the Docker image
 echo "Building static application code image."
-cd ${WORKING_DIR}
-docker build -t symfony/app-code-static app-code-static
+cd ${DOCKERFILE_DIR}
+docker build -t symfony/worker-prod ${DOCKERFILE_DIR}
 
+rm ${DOCKERFILE_DIR}/code.tar.gz

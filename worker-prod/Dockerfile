@@ -4,6 +4,10 @@ MAINTAINER Markus Weiland <mw@graph-ix.net>
 
 ########
 
-ADD build-release.sh /etc/nginx/sites-available/
+RUN sudo apt-get install -y acl
 
-# TODO
+RUN mkdir -p /var/www/symfony
+ADD code.tar.gz /var/www/symfony
+
+RUN setfacl -R -m g:www-data:rwX /var/www/symfony/app/cache /var/www/symfony/app/logs
+RUN setfacl -dR -m g:www-data:rwX /var/www/symfony/app/cache /var/www/symfony/app/logs
