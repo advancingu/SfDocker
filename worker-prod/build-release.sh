@@ -30,6 +30,10 @@ git checkout ${BRANCH}
 # Get dependencies with Composer
 ${COMPOSER_BIN} --no-interaction install
 
+# Clear the cache so we don't have the build environment spill into production
+# TODO pre-warm with production environment instead
+app/console cache:clear --no-warmup
+
 # Package everything up
 tar -czf ../code.tar.gz *
 
