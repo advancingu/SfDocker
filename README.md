@@ -11,7 +11,7 @@ Structure
 ---------
 
 There is a `worker-base` image file that contains PHP-FPM and NGINX. Both are configured to expect a Symfony project at
-`/var/www/symfony` at runtime inside the container.
+`/var/www/app` at runtime inside the container.
 
 There is a `worker-dev` images that extends `worker-base` that adds development functionality such as Xdebug.
 

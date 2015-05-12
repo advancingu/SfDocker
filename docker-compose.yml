@@ -19,4 +19,4 @@ worker:
     - db
     volumes:
     - "var/nginx/:/var/log/nginx"
-    - ../mySymfonyProject:/var/www/symfony
+    - ../mySymfonyProject:/var/www/app
