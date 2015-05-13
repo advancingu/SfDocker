@@ -26,6 +26,7 @@ git clone ${REPOSITORY}
 CODE_DIR="$(ls -d */|head -n 1)"
 cd ${CODE_DIR}
 git checkout ${BRANCH}
+rm -rf ${BUILD_DIR}/${CODE_DIR}.git
 
 # Get dependencies with Composer
 ${COMPOSER_BIN} --no-interaction install
