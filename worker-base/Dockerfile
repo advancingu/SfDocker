@@ -13,6 +13,7 @@ RUN apt-get install -y nginx
 ADD nginx/nginx.conf /etc/nginx/
 ADD nginx/app.conf /etc/nginx/sites-available/
 ADD nginx/upstream.conf /etc/nginx/conf.d/upstream.conf
+ADD nginx/fastcgi_params /etc/nginx/
 
 RUN ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/app
 RUN rm /etc/nginx/sites-enabled/default
