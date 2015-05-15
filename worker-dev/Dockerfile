@@ -6,6 +6,9 @@ MAINTAINER Markus Weiland <mw@graph-ix.net>
 
 ADD nginx/app.conf /etc/nginx/sites-available/
 
+# Allow debugging PHP scripts with Xdebug for 10 minutes before Nginx times out
+RUN echo "fastcgi_read_timeout 600s;" >> /etc/nginx/fastcgi_params
+
 ########
 
 RUN apt-get install -y php5-xdebug && php5enmod xdebug
