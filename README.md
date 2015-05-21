@@ -26,8 +26,23 @@ into the container. This image can be easily deployed as an immutable throwaway 
 application. This image should be built by executing `worker-prod/build-release.sh`.
 
 Container environment variables are used to adapt application behavior to the respective environment.
-Simply add a `app/config/parameters.php` file to your project and include it after `app/config/parameters.yml`
-in your `app/config/config.yml` file. Inside `parameters.php`, load parameters as follows:
+
+Configuration
+-------------
+
+Add a `app/config/parameters.php` file to your project and include it after `app/config/parameters.yml`
+in your configuration file:
+
+```yaml
+# app/config/config.yml
+imports:
+    - { resource: parameters.yml }
+    - { resource: parameters.php }
+
+# ...
+```
+
+In `parameters.php`, load parameters as follows:
 
 ```php
 // app/config/parameters.php
