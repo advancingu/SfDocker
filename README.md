@@ -1,25 +1,41 @@
 Docker containers for Symfony development & deployment
 ======================================================
 
-This repository provides a build script and Dockerfiles for setting up a complete Symfony development environment.
+This repository provides Dockerfiles for setting up ready to use Symfony development and production environments.
 
-The goal is to allow this setup to be easily deployed to production by not adding the dev-specific Docker image layer.
+The configuration used in this repository makes use of Docker's layered image approach in the sense that the development 
+environment image is simply an additional layer on top of the base image of the production environment.
+This means your development environment will be practically identical to the production environment.
 
-This repository is still in early development. Feel free to contribute.
+Production images built from this repository are immutable and can be easily deployed to off-the-shelf Docker instances with 
+all application code, dependencies, folders, etc. already included.
 
 Structure
 ---------
 
-There is a `worker-base` image file that contains PHP-FPM and NGINX. Both are configured to expect a Symfony project at
+There is a `worker-base` image file that contains PHP-FPM and NGINX. Both processes expect a Symfony project at
 `/var/www/app` at runtime inside the container.
 
-There is a `worker-dev` images that extends `worker-base` that adds development functionality such as Xdebug.
+There is a `worker-dev` images that extends `worker-base` that adds development functionality such as Xdebug 
+and turns on PHP debug output. The image also sets Nginx's configuration to load `web/app_dev.php` instead 
+of `web/app.php`. This development image expects application files to be mounted into the container to 
+`/var/www/app` from the host which means any code changes will immediately take effect.
 
-There is a `worker-prod` image that extends `worker-base` and bakes a Symfony project into the container. This image
-can be easily deployed as an immutable throwaway instance of the entire application. This image is built with 
-`worker-prod/build-release.sh`.
+There is a `worker-prod` production image that extends `worker-base` and simply bakes a Symfony project 
+into the container. This image can be easily deployed as an immutable throwaway instance of the entire
+application. This image should be built by executing `worker-prod/build-release.sh`.
 
-Environment variables are used to control behavior of processes inside the container.
+Container environment variables are used to adapt application behavior to the respective environment.
+Simply add a `app/config/parameters.php` file to your project and include it after `app/config/parameters.yml`
+in your `app/config/config.yml` file. Inside `parameters.php`, load parameters as follows:
+
+    <?php
+
+    if (getenv('MY_ENV_VAR') !== false) {
+        $container->setParameter('my_parameter', getenv('MY_ENV_VAR'));
+    }
+
+    // ...
 
 Running app/console
 -------------------
@@ -61,12 +77,21 @@ Then run ``app/console`` with ``--env=cli`` to use parameters from this new envi
 Building SfDocker images
 ------------------------
 
-To build the Docker images, run the following commands in the repository's top folder:
+To build the development images, run the following commands in the repository's top folder:
 
     docker build -t symfony/worker-base worker-base
     docker build -t symfony/worker-dev worker-dev
 
+Then simply launch the development server with
+
+    docker-compose up
+
+To build a production image, run the following command in the repository's top folder:
+
+    ./worker-prod/build-release.sh
+
 Authors
 -------
 
-This repository was built by Markus Weiland (@advancingu) with significant contributions to the base design and code by Scott Wilson (@scooterXL).
+* Markus Weiland (@advancingu)
+* Scott Wilson (@scooterXL)
