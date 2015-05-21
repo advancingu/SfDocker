@@ -29,13 +29,30 @@ Container environment variables are used to adapt application behavior to the re
 Simply add a `app/config/parameters.php` file to your project and include it after `app/config/parameters.yml`
 in your `app/config/config.yml` file. Inside `parameters.php`, load parameters as follows:
 
-    <?php
+```php
+// app/config/parameters.php
+if (getenv('DB_1_PORT_3306_TCP_ADDR') !== false) {
+    $container->setParameter('database_host', getenv('DB_1_PORT_3306_TCP_ADDR'));
+}
 
-    if (getenv('MY_ENV_VAR') !== false) {
-        $container->setParameter('my_parameter', getenv('MY_ENV_VAR'));
-    }
+if (getenv('DB_1_PORT_3306_TCP_PORT') !== false) {
+    $container->setParameter('database_port', getenv('DB_1_PORT_3306_TCP_PORT'));
+}
 
-    // ...
+if (getenv('DB_1_ENV_MYSQL_DATABASE') !== false) {
+    $container->setParameter('database_name', getenv('DB_1_ENV_MYSQL_DATABASE'));
+}
+
+if (getenv('DB_1_ENV_MYSQL_USER') !== false) {
+    $container->setParameter('database_user', getenv('DB_1_ENV_MYSQL_USER'));
+}
+
+if (getenv('DB_1_ENV_MYSQL_PASSWORD') !== false) {
+    $container->setParameter('database_password', getenv('DB_1_ENV_MYSQL_PASSWORD'));
+}
+
+// ...
+```
 
 Running app/console
 -------------------
