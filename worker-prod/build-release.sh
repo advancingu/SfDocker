@@ -4,7 +4,6 @@
 # Simply deploy this image to your production servers.
 
 set -e
-set -xv
 
 COMPOSER_BIN=composer
 BUILD_DIR=/tmp/app-code-build
