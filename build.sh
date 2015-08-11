@@ -44,7 +44,7 @@ fi
 # Docker management tool, formerly known as Fig
 if [ ! -e ~/bin/docker-compose ]; then
     echo "Installing docker-compose (aka Fig)."
-    curl -L https://github.com/docker/fig/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > ~/bin/docker-compose
+    curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > ~/bin/docker-compose
     chmod +x ~/bin/docker-compose
 fi
 
