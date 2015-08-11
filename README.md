@@ -1,4 +1,4 @@
-Docker containers for Symfony development & deployment
+Docker containers for Symfony development & production
 ======================================================
 
 This repository provides Dockerfiles for setting up ready to use Symfony development and production environments.
@@ -16,7 +16,7 @@ Structure
 There is a `worker-base` image file that contains PHP-FPM and NGINX. Both processes expect a Symfony project at
 `/var/www/app` at runtime inside the container.
 
-There is a `worker-dev` images that extends `worker-base` that adds development functionality such as Xdebug 
+There is a `worker-dev` development image that extends `worker-base` and adds development functionality such as Xdebug 
 and turns on PHP debug output. The image also sets Nginx's configuration to load `web/app_dev.php` instead 
 of `web/app.php`. This development image expects application files to be mounted into the container to 
 `/var/www/app` from the host which means any code changes will immediately take effect.
@@ -25,10 +25,10 @@ There is a `worker-prod` production image that extends `worker-base` and simply 
 into the container. This image can be easily deployed as an immutable throwaway instance of the entire
 application. This image should be built by executing `worker-prod/build-release.sh`.
 
-Container environment variables are used to adapt application behavior to the respective environment.
-
 Configuration
 -------------
+
+Container environment variables are used to adapt application behavior to the respective environment.
 
 Add a `app/config/parameters.php` file to your project and include it after `app/config/parameters.yml`
 in your configuration file:
@@ -42,69 +42,41 @@ imports:
 # ...
 ```
 
-In `parameters.php`, load parameters as follows:
+In `parameters.php`, set Symfony parameters from environment variables as follows:
 
 ```php
 // app/config/parameters.php
-if (getenv('DB_1_PORT_3306_TCP_ADDR') !== false) {
-    $container->setParameter('database_host', getenv('DB_1_PORT_3306_TCP_ADDR'));
-}
+$parameters = [
+    // ENV_VAR_NAME => symfony parameter name
+    'DB_1_PORT_3306_TCP_ADDR' => 'database_host',
+    'DB_1_PORT_3306_TCP_PORT' => 'database_port',
+    'DB_1_ENV_MYSQL_DATABASE' => 'database_name',
+    'DB_1_ENV_MYSQL_USER' => 'database_user',
+    'DB_1_ENV_MYSQL_PASSWORD' => 'database_password',
+    // ...
+];
 
-if (getenv('DB_1_PORT_3306_TCP_PORT') !== false) {
-    $container->setParameter('database_port', getenv('DB_1_PORT_3306_TCP_PORT'));
+foreach ($parameters as $envVar => $sfParam) {
+    $value = getenv($envVar);
+    if ($value !== false && $value !== '') {
+        $container->setParameter($sfParam, $value);
+    }
 }
-
-if (getenv('DB_1_ENV_MYSQL_DATABASE') !== false) {
-    $container->setParameter('database_name', getenv('DB_1_ENV_MYSQL_DATABASE'));
-}
-
-if (getenv('DB_1_ENV_MYSQL_USER') !== false) {
-    $container->setParameter('database_user', getenv('DB_1_ENV_MYSQL_USER'));
-}
-
-if (getenv('DB_1_ENV_MYSQL_PASSWORD') !== false) {
-    $container->setParameter('database_password', getenv('DB_1_ENV_MYSQL_PASSWORD'));
-}
-
-// ...
 ```
+
+Note: All environment variables which are to be used as parameters need to be 
+defined in `worker-base/fpm/app.pool.conf`, otherwise they will not be
+visible to PHP code.
 
 Running app/console
 -------------------
 
-You can run Symfony's ``app/console`` utility from inside the container or from your host environment.
+To have Symfony's ``app/console`` utility work as expected, it needs to be run from inside the container so 
+that all environment variables are available for Symfony.
 
-### Inside the container
+Simply execute the following from the path of this repository:
 
-The advantage of running ``app/console`` inside the container is that the runtime environment will be exactly that 
-the application code will run in when called by Nginx. The disadvantage is that all files created by ``app/console`` 
-will be owned by ``root/root`` on the host filesystem.
-
-### In the host environment
-
-The advantage of running ``app/console`` in the host environment is that all files created are owned by the current 
-user. The disadvantage is that the runtime environment will be different from the production environment and database 
-parameters are different from those inside the containers.
-
-To allow your host environment ``app/console`` to connect to the database, create a new Symfony environment ``cli``.
-
-    # app/config/config_cli.yml
-    imports:
-        - { resource: config_dev.yml }
-        - { resource: parameters_cli.yml }
-
-
-    # app/config/parameters_cli.yml
-    # Parameters for running app/console from outside of Docker container
-    parameters:
-        database_driver: pdo_mysql
-        database_host: 127.0.0.1
-        database_port: null
-        database_name: symfony
-        database_user: root
-        database_password: symfonyrootpass
-
-Then run ``app/console`` with ``--env=cli`` to use parameters from this new environment.
+    docker-compose run worker /var/www/app/app/console
 
 Building SfDocker images
 ------------------------
